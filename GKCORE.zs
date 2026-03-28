@@ -99,20 +99,17 @@ class GKCore : EventHandler
                 }
             }
 
-            if (targetEnemy)
+           if (targetEnemy)
             {
-                Console.Printf(" ", targetEnemy.GetClassName());
-                
-                // 1. Take away the stagger token so the timer stops
+                // 1. Remove stagger token
                 targetEnemy.TakeInventory("GKStaggerToken", 1);
                 
-                // 2. We need to hand this off to GKCODE.zs to handle the animation and death!
-                // We will call your custom execution logic here in the next step.
+                // 2. Snap the player's camera to look directly at the enemy!
+                player.angle = player.AngleTo(targetEnemy);
+                player.pitch = player.PitchTo(targetEnemy, 0); 
+
+                // 3. Give and activate the Glory Kill animation!
+                player.GiveInventory("GKCode1", 1);
+                player.UseInventory(player.FindInventory("GKCode1"));
             }
-            else
-            {
-                // Optional: Play a "whiff" sound if they press E but nothing is in range
-                // player.A_StartSound("misc/gk_fail", CHAN_BODY);
-            }
-        }
-    }
+}
