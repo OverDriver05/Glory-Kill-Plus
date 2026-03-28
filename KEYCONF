@@ -1,0 +1,4 @@
+addkeysection "Glory Kill+" GKPlusKeys
+addmenukey "Execute Glory Kill" gk_execute
+alias gk_execute "netevent gk_execute"
+defaultbind e gk_execute
