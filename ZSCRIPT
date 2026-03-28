@@ -1,5 +1,4 @@
-// ZSCRIPT
-version "4.10" // Make sure to specify a GZDoom version
+version "4.10"
 
 #include "GKCORE.zs"
 #include "GKCODE0.zs"
