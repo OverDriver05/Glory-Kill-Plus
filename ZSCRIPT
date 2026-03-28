@@ -1,5 +1,5 @@
 version "4.10"
 
 #include "GKCORE.zs"
-#include "GKCODE0.zs"
-#include "GKCODE1.zs"
+#include "Glory Kills/GKCODE0.zs"
+#include "Glory Kills/GKCODE1.zs"
