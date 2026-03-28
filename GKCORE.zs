@@ -112,4 +112,5 @@ class GKCore : EventHandler
                 player.GiveInventory("GKCode1", 1);
                 player.UseInventory(player.FindInventory("GKCode1"));
             }
+           }
 }
