@@ -88,6 +88,87 @@ class GKCore : EventHandler
                 {
                     // Check 3: Are we actually looking at them? (Field of View check)
                     double angleTo = player.AngleTo(mo);
+                    double angleDiff = Actor.deltaangle(player.angle, angleTo);
+                    
+                    // If the enemy is within a 90-degree cone in front of the player
+                    if (abs(angleDiff) < 45.0) 
+                    {
+                        closestDist = dist; // Update the closest distance
+                        targetEnemy = mo;   // We found our victim!
+                    }
+                }
+            }
+
+           if (targetEnemy)
+            {
+                // 1. Remove stagger token
+                targetEnemy.TakeInventory("GKStaggerToken", 1);
+                
+                // 2. Snap the player's camera to look directly at the enemy!
+                player.angle = player.AngleTo(targetEnemy);
+                player.pitch = player.PitchTo(targetEnemy, 0); 
+
+                // 3. Give and activate the Glory Kill animation!
+                player.GiveInventory("GKCode1", 1);
+                player.UseInventory(player.FindInventory("GKCode1"));
+            }
+        }
+    }
+}
+    override void WorldThingDamaged(WorldEvent e)
+    {
+        let victim = e.Thing;
+        
+        // Check: Is it a monster? Did its health drop to 0? Is it NOT already staggered?
+        if (victim && victim.bIsMonster && victim.Health <= 0 && !victim.CountInv("GKStaggerToken"))
+        {
+            // PREVENT DEATH!
+            victim.Health = 1; 
+            
+            // Give them the Stagger Token to freeze them
+            victim.GiveInventory("GKStaggerToken", 1);
+            
+            // Force them into their "Pain" animation frame so they look hurt
+            victim.SetStateLabel("Pain"); 
+        }
+    }
+
+    override void NetworkProcess(ConsoleEvent e)
+    {
+        // Did the player just press the Glory Kill key?
+        if (e.Name == "gk_execute_event")
+        {
+            // Find the physical body (mo) of the player who pressed it
+            let player = players[e.Player].mo;
+            
+            // Safety check: Make sure the player exists and isn't dead
+            if (!player || player.Health <= 0) return; 
+
+            double maxGKRange = 96.0; // How close you need to be (96 units is a good melee range)
+            Actor targetEnemy = null;
+            double closestDist = maxGKRange;
+
+            // Create an iterator to search the area around the player
+            BlockThingsIterator it = BlockThingsIterator.Create(player, maxGKRange);
+            
+            while (it.Next())
+            {
+                Actor mo = it.thing;
+                
+                // Filter out junk: Ignore empty space, the player themselves, and non-monsters
+                if (!mo || mo == player || !mo.bIsMonster) continue;
+                
+                // Is the monster staggered? (Checking for our custom token)
+                if (mo.CountInv("GKStaggerToken") == 0) continue; 
+
+                // Calculate the true 3D distance
+                double dist = player.Distance3D(mo);
+                
+                // Check 1 & 2: Are they within range AND can the player actually see them?
+                if (dist <= closestDist && player.CheckSight(mo))
+                {
+                    // Check 3: Are we actually looking at them? (Field of View check)
+                    double angleTo = player.AngleTo(mo);
                     double angleDiff = deltaangle(player.angle, angleTo);
                     
                     // If the enemy is within a 90-degree cone in front of the player
