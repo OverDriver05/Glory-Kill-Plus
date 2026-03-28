@@ -34,7 +34,6 @@ class GKStaggerToken : Inventory
 
 class GKCore : EventHandler
 {
-    // PART A: Intercept Damage
     override void WorldThingDamaged(WorldEvent e)
     {
         let victim = e.Thing;
@@ -53,7 +52,6 @@ class GKCore : EventHandler
         }
     }
 
-    // PART B: Listen for Player Input & Find Target
     override void NetworkProcess(ConsoleEvent e)
     {
         // Did the player just press the Glory Kill key?
@@ -101,10 +99,9 @@ class GKCore : EventHandler
                 }
             }
 
-            // PART C: Trigger the Execution!
             if (targetEnemy)
             {
-                Console.Printf("Glory Killing the %s!", targetEnemy.GetClassName());
+                Console.Printf(" ", targetEnemy.GetClassName());
                 
                 // 1. Take away the stagger token so the timer stops
                 targetEnemy.TakeInventory("GKStaggerToken", 1);
