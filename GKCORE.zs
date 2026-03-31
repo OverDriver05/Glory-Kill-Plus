@@ -15,7 +15,7 @@ class GKStaggerToken : Inventory
         // 1. Freeze the monster in place
         Owner.bNoPain = true;       // Stop them from flinching from other attacks
         Owner.bFriendly = true;     // Stop other monsters from targeting them
-        Owner.A_SetTics(1);         // Freeze their animation frame
+        Owner.A_SetTics(-5);         // Freeze their animation frame
 
         // Optional: Spawn little blue/orange sparkles around the Owner here!
 
