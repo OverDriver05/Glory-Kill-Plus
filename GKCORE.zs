@@ -115,23 +115,6 @@ class GKCore : EventHandler
         }
     }
 
-    {
-        let victim = e.Thing;
-        
-        // Check: Is it a monster? Did its health drop to 0? Is it NOT already staggered?
-        if (victim && victim.bIsMonster && victim.Health <= 0 && !victim.CountInv("GKStaggerToken"))
-        {
-            // PREVENT DEATH!
-            victim.Health = 1; 
-            
-            // Give them the Stagger Token to freeze them
-            victim.GiveInventory("GKStaggerToken", 1);
-            
-            // Force them into their "Pain" animation frame so they look hurt
-            victim.SetStateLabel("Pain"); 
-        }
-    }
-
     override void NetworkProcess(ConsoleEvent e)
     {
         // Did the player just press the Glory Kill key?
