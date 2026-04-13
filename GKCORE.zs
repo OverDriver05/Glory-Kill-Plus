@@ -115,7 +115,6 @@ class GKCore : EventHandler
         }
     }
 
-    override void WorldThingDamaged(WorldEvent e)
     {
         let victim = e.Thing;
         
