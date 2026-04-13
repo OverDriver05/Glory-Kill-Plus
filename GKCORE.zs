@@ -39,7 +39,7 @@ class GKCore : EventHandler
         let victim = e.Thing;
         
         // Check: Is it a monster? Did its health drop to 0? Is it NOT already staggered?
-        if (victim && victim.bIsMonster && victim.Health <= 0 && !victim.CountInv("GKStaggerToken"))
+        if (victim && victim.bIsMonster && victim.health < victim.default.health * 0.2 && !victim.CountInv("GKStaggerToken"))
         {
             // PREVENT DEATH!
             victim.Health = 1; 
